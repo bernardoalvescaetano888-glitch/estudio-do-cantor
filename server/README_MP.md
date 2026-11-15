@@ -34,13 +34,25 @@ python mp_server.py          # sobe em http://localhost:5000
    URL: `https://SEU-SERVIDOR/webhook` → evento: **pagamentos (payments)**
 2. Ou informe a URL ao criar os links (passo 5) com `--webhook`
 
-## 5. Criar os 3 links de pagamento
+## 5. Venda com Pix QR direto (sem link de pagamento) ⭐
 
-```bash
-python mp_links.py --webhook https://SEU-SERVIDOR.onrender.com/webhook
-```
+O servidor já tem páginas prontas de venda via **Pix dinâmico**:
 
-Imprime os links PLUS/MAX/ULTRA prontos pra colocar na bio. Cada link já aponta pro seu webhook.
+| Página | O que mostra |
+|---|---|
+| `https://SEU-SERVIDOR/plans` | Menu com os 3 planos |
+| `https://SEU-SERVIDOR/buy/1` | QR Pix de R$ 70 (PLUS) |
+| `https://SEU-SERVIDOR/buy/2` | QR Pix de R$ 100 (MAX) |
+| `https://SEU-SERVIDOR/buy/3` | QR Pix de R$ 140 (ULTRA) |
+
+Fluxo na página: cliente abre → vê o QR/copia-e-cola → paga → **a chave aparece na tela sozinha** (a página verifica a cada 3s) + chega por e-mail. Nada manual.
+
+> No app, aponte `STORE_URL` para a rota `/plans`. Essa é a forma recomendada:
+> valor certo garantido, sem link de terceiros, e o webhook do mesmo pagamento
+> entrega a licença. Use os endpoints direto do servidor — nunca embuta o
+> token no app.
+
+Alternativa clássica (Checkout Pro): `python mp_links.py --webhook https://...`
 
 ## 6. Testar sem pagar de verdade
 

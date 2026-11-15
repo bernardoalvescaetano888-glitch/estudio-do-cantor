@@ -32,7 +32,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import lic_core as lic
 
 VERSION = "1.0.0"
-STORE_URL = "https://kiwify.link/estudiodocantor"  # <- troque pelo seu link de venda
+STORE_URL = "https://SEU-SERVIDOR.onrender.com/plans"  # <- troque pela URL do seu servidor MP (rota /plans)
 
 C = {
     "bg":     "#0f1117",

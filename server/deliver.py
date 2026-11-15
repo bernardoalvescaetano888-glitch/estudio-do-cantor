@@ -62,6 +62,22 @@ def process_payment(payment: dict) -> str:
     if status != "approved":
         return f"pagamento {pid} ignorado (status: {status})"
 
+    # Idempotência: pagamento já entregue? reenvia a MESMA chave (evita duplicar)
+    if os.path.exists(LEDGER):
+        try:
+            with open(LEDGER, "r", encoding="utf-8") as f:
+                for sale in json.load(f):
+                    if str(sale.get("id")) == str(pid) and sale.get("chave"):
+                        payer = ((payment.get("payer") or {}).get("email")) or ""
+                        resend = send_email(
+                            payer, f"🎵 Sua licença {sale['plano']} — Estúdio do Cantor",
+                            f"Sua chave (pagamento {pid}):\n\n    {sale['chave']}\n\n"
+                            "Abra o app → ⭐ Ativar licença → cole a chave.")
+                        return (f"pagamento {pid} já processado — "
+                                f"chave reenviada ({resend})")
+        except Exception:
+            pass
+
     amount = float(payment.get("transaction_amount", 0) or 0)
     tier = plan_from_amount(amount)
     if not tier:
