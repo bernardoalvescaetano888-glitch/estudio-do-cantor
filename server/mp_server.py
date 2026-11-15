@@ -110,6 +110,33 @@ const t=setInterval(async()=>{try{
 </script></body></html>"""
 
 
+@app.get("/fixo")
+def fixo():
+    """QRs estáticos do Mercado Pago (cadastrados pelo vendedor no app MP).
+    Recebem o dinheiro direto, mas NÃO entregam chave automática — entrega manual."""
+    from flask import url_for
+    items = ""
+    for t, (n, v) in sorted(PLANS.items()):
+        fname = {1: "pix_plus_70.png", 2: "pix_max_100.png", 3: "pix_ultra_140.png"}[t]
+        items += (
+            f"<div style='background:#1c2130;border-radius:14px;padding:18px;"
+            f"margin:14px;max-width:340px;text-align:center'>"
+            f"<h2 style='color:#3ddc97;margin:6px'>{n} — R$ {v}/mês</h2>"
+            f"<img src='/static/qr/{fname}' style='width:100%;border-radius:10px;background:#fff'>"
+            f"<p style='color:#8a93a5;font-size:.85em'>Pague escaneando com o app do seu banco "
+            f"(Mercado Pago → Pix → ler QR). Depois envie o comprovante pelo WhatsApp "
+            f"para receber sua chave do app ⭐ Ativar licença.</p></div>")
+    return Response(
+        "<html lang=pt-BR><meta charset=utf-8><meta name=viewport "
+        "content='width=device-width,initial-scale=1'><title>Pagamento Pix — Estúdio do Cantor</title>"
+        "<body style='background:#0f1117;color:#e8eaf0;font-family:system-ui;"
+        "display:flex;flex-direction:column;align-items:center;padding:24px'>"
+        "<h1 style='color:#3ddc97'>🎛 Estúdio do Cantor</h1>"
+        "<p>Pagamento via <b>Pix QR fixo</b> (Mercado Pago)</p>" + items +
+        "<a href='/plans' style='color:#5aa7ff'>← Voltar aos planos (com entrega automática)</a>"
+        "</body></html>", content_type="text/html; charset=utf-8")
+
+
 @app.get("/plans")
 def plans():
     items = "".join(
@@ -122,6 +149,8 @@ def plans():
         "<h1 style='color:#3ddc97'>🎛 Estúdio do Cantor</h1>"
         "<p>Escolha seu plano (licença mensal, pagamento via Pix):</p>"
         f"<ul style='list-style:none;padding:0;text-align:center'>{items}</ul>"
+        "<p style='color:#8a93a5'><a href='/fixo' style='color:#ffb454'>📄 Pagar com QR fixo "
+        "(entrega manual pelo WhatsApp)</a></p>"
         "</body></html>", content_type="text/html; charset=utf-8")
 
 
