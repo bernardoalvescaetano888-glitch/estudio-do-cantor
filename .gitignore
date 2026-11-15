@@ -7,6 +7,8 @@ dist/
 license.json
 client_secret.json
 token.json
+server/.env
+server/vendas.json
 *.mp3
 *.wav
 *.mp4
