@@ -137,6 +137,19 @@ def fixo():
         "</body></html>", content_type="text/html; charset=utf-8")
 
 
+@app.get("/")
+@app.get("/download")
+def download_site():
+    """Site de download (index.html do repo estudio-download)."""
+    page = os.path.join(HERE, "download.html")
+    if os.path.exists(page):
+        with open(page, "r", encoding="utf-8") as f:
+            return Response(f.read(), content_type="text/html; charset=utf-8")
+    return Response("<meta charset=utf-8><h1>🎛 Estúdio do Cantor</h1>"
+                    "<p>Sistema de licenças no ar. Use /plans para comprar.</p>",
+                    content_type="text/html; charset=utf-8")
+
+
 @app.get("/plans")
 def plans():
     items = "".join(
