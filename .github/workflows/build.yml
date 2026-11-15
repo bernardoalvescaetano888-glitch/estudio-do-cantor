@@ -1,0 +1,46 @@
+name: Build (Windows / macOS / Linux)
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Instalar dependências
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Compilar executável
+        run: >
+          pyinstaller --noconfirm --clean --windowed
+          --name EstudioDoCantor
+          --collect-all demucs
+          --collect-all whisper
+          app.py
+
+      - name: Salvar artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: EstudioDoCantor-${{ matrix.os }}
+          path: dist/EstudioDoCantor*
+
+      - name: Publicar na Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/EstudioDoCantor*
