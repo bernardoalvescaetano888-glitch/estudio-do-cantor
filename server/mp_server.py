@@ -137,6 +137,27 @@ def fixo():
         "</body></html>", content_type="text/html; charset=utf-8")
 
 
+# ------------------------------------------------------------------ downloads diretos
+# O cliente baixa pela SUA página, sem ver o GitHub por trás:
+# /dl/<nome> -> redireciona (302) para o arquivo da Release
+_DL = {
+    "windows":         "https://github.com/bernardoalvescaetano888-glitch/estudio-download/releases/latest/download/EstudioDoCantor-Setup.exe",
+    "windows-portatil":"https://github.com/bernardoalvescaetano888-glitch/estudio-download/releases/latest/download/EstudioDoCantor-Portable-Windows.zip",
+    "macos":           "https://github.com/bernardoalvescaetano888-glitch/estudio-download/releases/latest/download/EstudioDoCantor.dmg",
+    "linux":           "https://github.com/bernardoalvescaetano888-glitch/estudio-download/releases/latest/download/estudiodocantor.deb",
+    "linux-portatil":  "https://github.com/bernardoalvescaetano888-glitch/estudio-download/releases/latest/download/EstudioDoCantor-Portable-Linux.tar.gz",
+    "fonte":           "https://github.com/bernardoalvescaetano888-glitch/estudio-download/archive/refs/heads/main.zip",
+}
+
+
+@app.get("/dl/<nome>")
+def dl(nome):
+    destino = _DL.get(nome)
+    if not destino:
+        return Response("Download inexistente", status=404)
+    return Response(status=302, headers={"Location": destino})
+
+
 @app.get("/")
 @app.get("/download")
 def download_site():
