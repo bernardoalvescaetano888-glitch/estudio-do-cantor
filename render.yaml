@@ -1,0 +1,19 @@
+# Deploy no Render (https://render.com) — plano gratuito
+# No painel: New + -> Blueprint -> selecione este repositorio
+services:
+  - type: web
+    name: estudio-do-cantor
+    runtime: python
+    plan: free
+    rootDir: server
+    buildCommand: pip install -r requirements.txt
+    startCommand: python mp_server.py
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      # Configure no painel do Render (Environment):
+      # MP_ACCESS_TOKEN  -> token de producao do Mercado Pago (APP_USR-...)
+      # EMAIL_USER       -> e-mail que envia as chaves
+      # EMAIL_PASS       -> senha de app do Gmail (16 letras)
+      # WEBHOOK_URL      -> https://SEU-APP.onrender.com/webhook
