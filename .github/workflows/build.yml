@@ -29,11 +29,24 @@ jobs:
           pip install pyinstaller
 
       - name: Compilar executável
+        if: runner.os != 'Windows'
         run: >
           pyinstaller --noconfirm --clean --windowed
           --name EstudioDoCantor
           --collect-all demucs
           --collect-all whisper
+          --add-data "img:img"
+          app.py
+
+      - name: Compilar executável (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: >
+          pyinstaller --noconfirm --clean --windowed
+          --name EstudioDoCantor
+          --collect-all demucs
+          --collect-all whisper
+          --add-data "img;img"
           app.py
 
       - name: Salvar artefato
