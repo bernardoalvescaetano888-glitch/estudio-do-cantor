@@ -37,11 +37,20 @@ Licenças são **chaves mensais** geradas por você (veja `keygen.py`). Quando o
    - Windows: `executar.bat`
    - macOS/Linux: `./executar.sh`
 
+## 💰 Receber pelo Mercado Pago
+
+1. No app do Mercado Pago/site: **Criar link de pagamento** com o valor do plano (R$ 70 / R$ 100 / R$ 140)
+2. Cliente paga por **Pix, cartão ou boleto** → o cai direto na sua conta MP
+3. Você recebe a notificação por e-mail → roda `python keygen.py -t X -m 1` → envia a chave ao cliente
+4. Para cobrança automática todo mês, use **Mercado Pago Assinaturas** (recurring) — o MP cobra o cliente sozinho e você só renova a chave
+
+> Dica de taxas: Pix é o mais barato (~1,5%); cartão custa mais (~5%). Prefira deixar o Pix em destaque no link.
+
 ## 🔑 Fluxo de venda (passo a passo)
 
 1. Publique o app no **GitHub** (veja `DEPLOY.md`) — os downloads de Windows/Mac/Linux são gerados automaticamente a cada versão.
-2. Crie o link de pagamento na **Kiwify/Hotmart** e troque a constante `STORE_URL` no `app.py`.
-3. Cliente paga → você roda:
+2. Crie os **links de pagamento no Mercado Pago** e troque a constante `STORE_URL` no `app.py`.
+3. Cliente paga → notificação chega no seu Mercado Pago → você roda:
    ```
    python keygen.py -t 3 -m 1
    ```
